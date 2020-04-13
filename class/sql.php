@@ -16,7 +16,7 @@ class Sql extends PDO{ // extend para usar o prepare, bindParam, etc ...
 
 		foreach ($params as $key => $value) {
 					
-					$this->setParam($key, $value);
+					$this->setParam($statement, $key, $value);
 
 				}
 
@@ -24,7 +24,7 @@ class Sql extends PDO{ // extend para usar o prepare, bindParam, etc ...
 
 	public function setParam($statement, $key, $value){ // função para um parametro somente 
 
-		$statement->bindParam($key, $value);
+		return $statement->bindParam($key, $value);
 
 	}
 
@@ -40,13 +40,11 @@ class Sql extends PDO{ // extend para usar o prepare, bindParam, etc ...
 
 	}
 
+	public function select($rawQuery, $params = array()){ // usa a função query para fazer o select
 
-	public function select($rawQuery){ // usa a função query para fazer o select
+		$select = $this->query($rawQuery, $params); //fazemos assim pq o select retorna dados e usa o fetchAll, o que não acontece com o insert ou update por exemplo
 
-		$return = $this->query($rawQuery); //fazemos assim pq o select retorna dados e usa o fetchAll, o que não acontece com o insert ou update por exemplo
-
-		return $return->fetchAll(PDO::FETCH_ASSOC);
-
+		return $return = $select->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 }
