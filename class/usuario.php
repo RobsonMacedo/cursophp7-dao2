@@ -70,17 +70,7 @@ class Usuario{
 
 		if (count($result) > 0){
 
-			$row = $result[0];
-
-			//print_r($row['id_usuarios']);	
-		
-
-			$this->setId_usuario($row['id_usuarios']);
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtCadastro($row['dtcadastro']);
-
-			//return $this->getId_usuario();	
+			$this->setData($result[0]);
 
 		}else{
 
@@ -88,7 +78,7 @@ class Usuario{
 		}
 	}
 
-	public function getLista(){ // carrega vários usuarios
+	public static function getLista(){ // carrega vários usuarios
 
 		$sql = new Sql();
 
@@ -122,18 +112,8 @@ class Usuario{
 
 		if (count($result) > 0){
 
-			$row = $result[0];
-
-			//print_r($row['id_usuarios']);	
-		
-
-			$this->setId_usuario($row['id_usuarios']);
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtCadastro($row['dtcadastro']);
-
-			//return $this->getId_usuario();	
-
+			$this->setData($result[0]);
+			
 		}else{
 
 			throw new Exception("Login e/ou Senha inválidos!!!", 1);
@@ -141,8 +121,65 @@ class Usuario{
 		}
 	}
 
-	
+	public function setData($data){
 
+		$this->setId_usuario($data['id_usuarios']);
+		$this->setDeslogin($data['deslogin']);
+		$this->setDessenha($data['dessenha']);
+		$this->setDtCadastro(new DateTime($data['dtcadastro']));
+	}
+
+	public function insert(){
+
+		$sql = new Sql();
+		$results = $sql->select('CALL sp_usuarios_insert(:LOGIN, :PASS)', array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASS'=>$this->getDessenha()
+		));
+
+		if (count($results) > 0){
+
+			$this->setData($results[0]);
+
+		}
+
+
+	}
+
+	public function insert2($login, $senha){
+
+		$sql = new Sql();
+		$results = $sql->query('INSERT INTO tb_usuarios(deslogin, dessenha) VALUES (:LOGIN, :PASS)', array(
+				':LOGIN'=>$login,
+				':PASS'=>$senha
+			));
+
+	}	
+
+	public function insert3(){
+
+			$sql = new Sql();
+			$insert = $sql->query('INSERT INTO tb_usuarios(deslogin, dessenha) VALUES (:LOGIN, :PASS)', array(
+				':LOGIN'=>$this->getDeslogin(),
+				':PASS'=>$this->getDessenha()
+			));
+
+		 	return $sql->select('SELECT * FROM tb_usuarios WHERE id_usuarios = LAST_INSERT_ID()');
+	}
+
+	public function update($login, $pass){
+
+		$this->setDeslogin($login);
+		$this->setDessenha($pass);
+
+		$sql = new Sql();
+		$sql->query('UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASS WHERE id_usuarios = :ID', array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASS'=>$this->getDessenha(),
+			':ID'=>$this->getId_usuario()
+		));
+
+	}
 
 	public function __toString(){
 			

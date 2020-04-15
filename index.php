@@ -46,11 +46,42 @@ echo json_encode($lista);
 */
 
 //Carregamos com o LOGIN e a SENHA
+/*
 $loginEsenha = new Usuario();
 
-$loginEsenha->login('Robson', '1234567890');
+$loginEsenha->login('Robson', '123456789');
 
 echo ($loginEsenha);
+*/
+
+// Testando a função do INSERT
+/*
+$aluno = new Usuario();
+
+$aluno->setDeslogin('Mauricinho');
+$aluno->setDessenha('24');
+
+//$aluno->insert();
+//$aluno->insert2('BAludao', '22');
+$aluno->insert3();
+//$resultado = $aluno->getLista();
+
+//echo json_encode($resultado);
+echo $aluno;
+*/
+
+// Testando o UPDATE
+/*
+$update = new Usuario();
+$update->loadById(4);
+$update->update('Novo', '111');
+echo ($update);
+*/	
+
+
+$lista = Usuario::getLista();
+
+echo json_encode($lista);
 
 
 
