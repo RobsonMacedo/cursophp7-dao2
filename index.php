@@ -78,12 +78,20 @@ $update->update('Novo', '111');
 echo ($update);
 */	
 
-
+/*
 $lista = Usuario::getLista();
 
 echo json_encode($lista);
+*/
 
+$del = new Usuario();
 
+$del->loadById(11);
 
+$del->delete();
+
+echo $del;
+
+//$del->delete();
 
  ?>
